@@ -11,8 +11,8 @@ export const hashPassword = async (userValue) => {
 
 export const comparePassword = async (userPassword, password) => {
     try {
+        
         const isMatch = await bcrypt.compare(userPassword, password)
-
         return isMatch
 
     } catch (error) {

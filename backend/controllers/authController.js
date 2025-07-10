@@ -1,12 +1,12 @@
 import { text } from "express";
-import pool from "../libs/database.js"
-import { comparePassword, createJWT } from "../libs/index.js";
+import { pool } from "../libs/database.js"
+import { comparePassword, createJWT, hashPassword } from "../libs/index.js";
 
 export const signupUser = async (req, res) => {
     try {
-        const { name, password, email } = req.body;
+        const { firstName, password, email } = req.body;
 
-        if (!name || !password || !email) {
+        if (!firstName || !password || !email) {
             return res.status(404).json({
                 status: "failed",
                 message: "Provide missing Fields!"
@@ -18,7 +18,7 @@ export const signupUser = async (req, res) => {
             values: [email],
         })
 
-        if (userExists.rows[0].userExists) {
+        if (userExists.rows[0].exists) {
             return res.status(400).json({
                 status: "failed",
                 message: "Email Already Exists, Try Login"
@@ -27,9 +27,9 @@ export const signupUser = async (req, res) => {
 
         const hashedPassword = await hashPassword(password)
 
-        const user = pool.query({
-            text: `INSERT INTO tblusers (firstname, email, password) VALUES ($1, $2, $3) RETURNING *`,
-            values: [firstname, email, hashedPassword],
+        const user = await pool.query({
+            text: `INSERT INTO tbluser (firstname, email, password) VALUES ($1, $2, $3) RETURNING *`,
+            values: [firstName, email, hashedPassword],
         })
 
         user.rows[0].password = undefined;
@@ -37,7 +37,7 @@ export const signupUser = async (req, res) => {
         res.status(201).json({
             status: "Success",
             message: "User Created Successfully",
-            user: user.row[0]
+            user: user.rows[0]
         })
 
     } catch (error) {
@@ -53,8 +53,8 @@ export const signinUser = async (req, res) => {
     try {
         const { email, password } = req.body
 
-        const result = pool.query({
-            text: `SELECT * from tblusers WHERE email = $1`,
+        const result = await pool.query({
+            text: `SELECT * from tbluser WHERE email = $1`,
             values: [email]
         });
 
@@ -67,7 +67,8 @@ export const signinUser = async (req, res) => {
             })
         }
 
-        const isMatch = await comparePassword(password)
+        const isMatch = await comparePassword(password, user?.password)
+        
         if (!isMatch) {
             return res.status(400).json({
                 status: "failed",
@@ -76,10 +77,10 @@ export const signinUser = async (req, res) => {
         }
         const token = createJWT(user.id)
 
-        user.password= undefined
+        user.password = undefined
 
         res.status(200).json({
-            status:"success",
+            status: "success",
             message: "user Login Successful",
             user,
             token
