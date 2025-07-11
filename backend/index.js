@@ -19,7 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api-v1", routes)
 
 app.use((req, res) => {
-    res.status(401).json({
+    res.status(404).json({
         status: "404 Not Found",
         message: "Resource/Route not found"
     })

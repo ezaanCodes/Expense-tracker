@@ -8,10 +8,10 @@ export const hashPassword = async (userValue) => {
 
     return hashedPassword
 }
-
+// client supplied Password, Password pulled from Database
 export const comparePassword = async (userPassword, password) => {
     try {
-        
+
         const isMatch = await bcrypt.compare(userPassword, password)
         return isMatch
 
@@ -23,11 +23,11 @@ export const comparePassword = async (userPassword, password) => {
 export const createJWT = (id) => {
     return JWT.sign(
         {
-            userId: id
+            userId: id,
         },
         process.env.JWT_SECRET,
         {
-            expiresIn: "1d"
+            expiresIn: "1d",
         }
-    )
+    );
 }

@@ -2,7 +2,6 @@ import JWT from "jsonwebtoken";
 
 const authMiddleware = async (req, res, next) => {
   const authHeader = req?.headers?.authorization;
-
   if (!authHeader || !authHeader?.startsWith("Bearer")) {
     return res
       .status(401)
@@ -13,7 +12,7 @@ const authMiddleware = async (req, res, next) => {
 
   try {
     const userToken = JWT.verify(token, process.env.JWT_SECRET);
-
+    req.body = req.body || {};
     req.body.user = {
       userId: userToken.userId,
     };
@@ -23,7 +22,7 @@ const authMiddleware = async (req, res, next) => {
     console.log(error);
     return res
       .status(401)
-      .json({ status: "auth_failed", message: "Authentication failed" });
+      .json({ status: "auth_failed", message: "Authentication failed" + error.message });
   }
 };
 
