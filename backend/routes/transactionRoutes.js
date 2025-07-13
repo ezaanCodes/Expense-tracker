@@ -6,7 +6,7 @@ const router = express.Router()
 
 router.get("/", authMiddleware, getTransactions)
 router.get("/dashboard", authMiddleware, getDashboardInformation)
-router.post("/add-transaction/:accountid", authMiddleware, addTransaction)
+router.post("/add-transaction/:account_id", authMiddleware, addTransaction)
 router.put("/transfer-money", authMiddleware, transferMoneyToAccount)
 
 

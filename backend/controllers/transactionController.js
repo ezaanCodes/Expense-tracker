@@ -157,7 +157,7 @@ export const addTransaction = async (req, res) => {
         const { userId } = req.body.user;
         const { account_id } = req.params;
         const { description, source, amount } = req.body;
-
+        console.log(account_id)
         if (!description || !source || !amount) {
             return res.status(403).json({
                 status: "Failed",
@@ -176,7 +176,7 @@ export const addTransaction = async (req, res) => {
             text: `SELECT * FROM tblaccount WHERE id = $1`,
             values: [account_id]
         })
-
+        console.log(result)
         const accountInfo = result.rows[0];
 
         if (!accountInfo) {
@@ -195,7 +195,7 @@ export const addTransaction = async (req, res) => {
             });
         }
 
-        await pool.query("BEGINS")
+        await pool.query("BEGIN")
         await pool.query({
             text: `UPDATE tblaccount SET account_balance = account_balance - $1, updatedat = CURRENT_TIMESTAMP WHERE id = $2`,
             values: [amount, account_id],
@@ -246,7 +246,7 @@ export const transferMoneyToAccount = async (req, res) => {
         // check account details for from account
 
         const fromAccountResult = await pool.query({
-            text: `SELECT * FROM tblaccounts where id = $1`,
+            text: `SELECT * FROM tblaccount where id = $1`,
             values: [from_account]
         })
         const fromAccount = fromAccountResult.rows[0]
@@ -264,35 +264,35 @@ export const transferMoneyToAccount = async (req, res) => {
         }
 
         await pool.query("BEGIN")
-        const from = await query.pool({
+        const from = await pool.query({
             text: `UPDATE tblaccount 
                    SET account_balance = account_balance - $1, 
                        updatedat = CURRENT_TIMESTAMP 
                    WHERE id = $2 RETURNING *`,
-            values: [account_balance, from_account]
+            values: [amount, from_account]
         })
 
-        const toAccount = await query.pool({
+        const toAccount = await pool.query({
             text: `UPDATE tblaccount 
                    SET account_balance = account_balance + $1, 
                        updatedat = CURRENT_TIMESTAMP 
                    WHERE id = $2 RETURNING *`,
-            values: [account_balance, to_account]
+            values: [amount, to_account]
         })
 
         const description = `Transfer ${fromAccount.account_name} to ${toAccount.rows[0].account_name}`
 
         // insert transaction record
-        await query.pool({
-            text: `INSERT into tbltransaction(user_id, description, type, status, amount, source,)
+        await pool.query({
+            text: `INSERT into tbltransaction(user_id, description, type, status, amount, source)
                     values ($1, $2, $3, $4, $5, $6)`,
             values: [userId, description, "expense", "Completed", amount, fromAccount.account_name]
         })
 
         const description1 = `Recieved ${fromAccount.account_name} to ${toAccount.rows[0].account_name}`
 
-        await query.pool({
-            text: `INSERT into tbltransaction(user_id, description, type, status, amount, source,)
+        await pool.query({
+            text: `INSERT into tbltransaction(user_id, description, type, status, amount, source)
                     values ($1, $2, $3, $4, $5, $6)`,
             values: [userId, description, "Income", "Completed", amount, toAccount.rows[0].account_name]
         })
