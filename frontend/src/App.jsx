@@ -5,26 +5,28 @@ import Dashboard from "./pages/dashboard"
 import Transactions from "./pages/transactions"
 import Settings from "./pages/settings"
 import Account from "./pages/account-page"
+import useStore from "./store"
 
 const RootLayout = () => {
-  const user = null
+  const { user } = useStore((state) => state)
+  console.log(user)
 
-  return !user ? <Navigate to="/sign-up" /> : (
-
-    <>
-    {/* <Navbar/> */}
-      <div>
-        <Outlet />
-      </div>
-    </>
-
-  )
+  return !user ? (<Navigate to="/sign-up" replace={true} />)
+    :
+    (
+      <>
+        {/* <Navbar/> */}
+        <div className="min-h-[calc(h-screen-100px)]">
+          <Outlet />
+        </div>
+      </>
+    )
 }
 
 function App() {
 
   return (
-    <div>
+    <div className="w-full min-h-screen px-6 bg-gray-100 md:px-20 dark:bg-slate-900">
       <main>
         <Routes>
           <Route element={<RootLayout />}>
@@ -34,10 +36,9 @@ function App() {
             <Route path="/settings" element={<Settings />} />
             <Route path="/account" element={<Account />} />
 
-
           </Route>
-          <Route path="/sign-up" element={SignUp} />
-          <Route path="/sign-in" element={SignIn} />
+          <Route path="/sign-up" element={<SignUp />} />
+          <Route path="/sign-in" element={<SignIn />} />
 
         </Routes>
 
@@ -48,4 +49,4 @@ function App() {
 }
 
 export default App
-// _-|
+// _ | -
