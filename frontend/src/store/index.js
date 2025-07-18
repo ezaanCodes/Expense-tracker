@@ -6,7 +6,6 @@ const useStore = create((set) => ({
     setTheme: (value) => set({ theme: value }),
     setCredentials: (user) => set({ user }),
     signOut: () => set({ user: null })
-
 }))
 
 export default useStore;
