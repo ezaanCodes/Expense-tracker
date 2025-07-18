@@ -6,11 +6,12 @@ import Transactions from "./pages/transactions"
 import Settings from "./pages/settings"
 import Account from "./pages/account-page"
 import useStore from "./store"
+import { setAuthToken } from "./libs/apiCall"
+import { Toaster } from "sonner"
 
 const RootLayout = () => {
   const { user } = useStore((state) => state)
-  console.log(user)
-
+  setAuthToken(user?.token || "")
   return !user ? (<Navigate to="/sign-up" replace={true} />)
     :
     (
@@ -26,8 +27,9 @@ const RootLayout = () => {
 function App() {
 
   return (
-    <div className="w-full min-h-screen px-6 bg-gray-100 md:px-20 dark:bg-slate-900">
-      <main>
+    <main>
+      <div className="w-full min-h-screen px-6 bg-gray-100 md:px-20 dark:bg-slate-900">
+
         <Routes>
           <Route element={<RootLayout />}>
             <Route path="/" element={<Navigate to="overview" />} />
@@ -41,10 +43,10 @@ function App() {
           <Route path="/sign-in" element={<SignIn />} />
 
         </Routes>
+      </div>
+      <Toaster richColors position="top-center" />
+    </main>
 
-      </main>
-
-    </div>
   )
 }
 
