@@ -8,6 +8,7 @@ import Account from "./pages/account-page"
 import useStore from "./store"
 import { setAuthToken } from "./libs/apiCall"
 import { Toaster } from "sonner"
+import Navbar from "./components/ui/navbar"
 
 const RootLayout = () => {
   const { user } = useStore((state) => state)
@@ -16,7 +17,7 @@ const RootLayout = () => {
     :
     (
       <>
-        {/* <Navbar/> */}
+        <Navbar/>
         <div className="min-h-[calc(h-screen-100px)]">
           <Outlet />
         </div>
