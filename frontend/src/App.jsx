@@ -12,6 +12,7 @@ import Navbar from "./components/ui/navbar"
 
 const RootLayout = () => {
   const { user } = useStore((state) => state)
+  
   setAuthToken(user?.token || "")
   return !user ? (<Navigate to="/sign-up" replace={true} />)
     :
@@ -37,7 +38,7 @@ function App() {
             <Route path="/overview" element={<Dashboard />} />
             <Route path="/transactions" element={<Transactions />} />
             <Route path="/settings" element={<Settings />} />
-            <Route path="/account" element={<Account />} />
+            <Route path="/accounts" element={<Account />} />
 
           </Route>
           <Route path="/sign-up" element={<SignUp />} />

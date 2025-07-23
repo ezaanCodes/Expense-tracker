@@ -17,12 +17,12 @@ const links = [
 ];
 
 const UserMenu = () => {
-  const { user, setCredentails } = useStore((state) => state);
+  const { user, setCredentials } = useStore((state) => state);
   const navigate = useNavigate();
 
   const handleSingout = () => {
     localStorage.removeItem("user");
-    setCredentails(null);
+    setCredentials(null);
     navigate("/sign-in");
   };
 
@@ -53,13 +53,27 @@ const UserMenu = () => {
               {({ active }) => (
                 <button
                   onClick={handleSingout}
-                  className={`${
-                    active
-                      ? "bg-violet-500/10 text-gray-900 dark:text-white"
-                      : "text-gray-900 dark:text-gray-500"
-                  } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                  className={`${active
+                    ? "bg-violet-500/10 text-gray-900 dark:text-white"
+                    : "text-gray-900 dark:text-gray-500"
+                    } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                 >
                   Sign Out
+                </button>
+              )}
+            </MenuItem>
+          </div>
+          <div className='px-1 py-1 '>
+            <MenuItem>
+              {({ active }) => (
+                <button
+                  // onClick={handleSingout}
+                  className={`${active
+                    ? "bg-violet-500/10 text-gray-900 dark:text-white"
+                    : "text-gray-900 dark:text-gray-500"
+                    } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                >
+                  Profile
                 </button>
               )}
             </MenuItem>
@@ -91,11 +105,10 @@ const MobileSidebar = () => {
                   {links.map(({ label, link }, index) => (
                     <Link to={link} key={index}>
                       <PopoverButton
-                        className={`${
-                          link === path
-                            ? "bg-black dark:bg-slate-900 text-white"
-                            : "text-gray-700 dark:text-gray-500"
-                        } w-1/2 px-6 py-2 rounded-full text-left`}
+                        className={`${link === path
+                          ? "bg-black dark:bg-slate-900 text-white"
+                          : "text-gray-700 dark:text-gray-500"
+                          } w-1/2 px-6 py-2 rounded-full text-left`}
                       >
                         {label}
                       </PopoverButton>
@@ -140,11 +153,10 @@ const Navbar = () => {
         {links.map(({ label, link }, index) => (
           <div
             key={index}
-            className={`${
-              link === path
-                ? "bg-black dark:bg-slate-800 text-white"
-                : "text-gray-700 dark:text-gray-500"
-            } px-6 py-2 rounded-full`}
+            className={`${link === path
+              ? "bg-black dark:bg-slate-800 text-white"
+              : "text-gray-700 dark:text-gray-500"
+              } px-6 py-2 rounded-full`}
           >
             <Link to={link}>{label}</Link>
           </div>
