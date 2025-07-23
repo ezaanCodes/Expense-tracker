@@ -52,7 +52,6 @@ const SignIn = () => {
 
         const userInfo = { ...res?.user, token: res.token }
         localStorage.setItem("user", JSON.stringify(userInfo))
-        console.log("user Info saved is", userInfo)
         setCredentials(userInfo)
         setTimeout(() => {
           navigate("/overview")
