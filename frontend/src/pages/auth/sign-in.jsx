@@ -50,10 +50,10 @@ const SignIn = () => {
       if (res?.user) {
         toast.success("User Authenticated successfully, Logging in")
 
-        const userInfo = { ...res?.data, token: res.token }
+        const userInfo = { ...res?.user, token: res.token }
         localStorage.setItem("user", JSON.stringify(userInfo))
-
-         setCredentials(userInfo) 
+        console.log("user Info saved is", userInfo)
+        setCredentials(userInfo)
         setTimeout(() => {
           navigate("/overview")
         }, 1500)
