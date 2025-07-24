@@ -1,9 +1,173 @@
-import React from 'react'
+/* eslint-disable no-unused-vars */
+import React, { useEffect, useState } from "react";
+import useStore from "../store/index";
+import { FaBtc, FaPaypal } from "react-icons/fa";
+import { RiVisaLine } from "react-icons/ri";
+import { GiCash } from "react-icons/gi";
+import api from "../libs/apiCall"; // Adjust the path if your api file is located elsewhere
+import { toast } from "sonner";
+import Loading from "../components/ui/loading";
+import Title from "../components/ui/title";
+import { MdAdd, MdVerifiedUser } from "react-icons/md";
+import { formatCurrency, maskAccountNumber } from "../libs";
+import AccountMenu from "../components/ui/accountDialog";
 
-const Account = () => {
+const ICONS = {
+  crypto: (
+    <div className="w-12 h-12 bg-amber-600 text-white flex items-center justify-center rounded-full">
+      <FaBtc size={26} />
+    </div>
+  ),
+  "visa debit card": (
+    <div className="w-12 h-12 bg-blue-600 text-white flex items-center justify-center rounded-full">
+      <RiVisaLine size={26} />
+    </div>
+  ),
+  cash: (
+    <div className="w-12 h-12 bg-red-600 text-white flex items-center justify-center rounded-full">
+      <GiCash size={26} />
+    </div>
+  ),
+  paypal: (
+    <div className="w-12 h-12 bg-blue-700 text-white flex items-center justify-center rounded-full">
+      <FaPaypal size={26} />
+    </div>
+  ),
+};
+const getIcon = (name) => {
+  const lowered = name?.toLowerCase();
+  if (lowered.includes("crypto")) return ICONS.crypto;
+  if (lowered.includes("visa")) return ICONS["visa debit card"];
+  if (lowered.includes("mastercard")) return ICONS.mastercard;
+  if (lowered.includes("paypal")) return ICONS.paypal;
+  if (lowered.includes("cash")) return ICONS.cash;
   return (
-    <div>Account</div>
-  )
-}
+    <div className="w-12 h-12 bg-gray-400 text-white flex items-center justify-center rounded-full">
+      ?
+    </div>
+  );
+};
 
-export default Account
+const AccountPage = () => {
+  const { user } = useStore((state) => state);
+
+  const [isOpen, setIsOpen] = useState(false);
+  const [isOpenTopup, setIsOpenTopup] = useState(false);
+  const [isOpenTransfer, setIsOpenTransfer] = useState(false);
+  const [selectedAccount, setSelectedAccount] = useState(null);
+  const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const fetchAccounts = async () => {
+    try {
+      const { data: res } = await api.get("/account");
+      setData(res.data);
+      console.log("Accounts fetched successfully:", res.data.createdAt);
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+      if (error?.response?.data?.status === "auth_failed") {
+        localStorage.removeItem("user");
+        window.location.reload();
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleOpenAddMoney = (account) => {
+    setSelectedAccount(account?.id);
+    setIsOpenTopup(true);
+  };
+  const handleTransfer = (account) => {
+    setSelectedAccount(account?.id);
+    setIsOpenTransfer(true);
+  };
+
+  useEffect(() => {
+    setIsLoading(true);
+    fetchAccounts();
+  }, []);
+
+  if (isLoading) {
+    return <Loading />;
+  }
+  return (
+    <>
+      <div className="w-full py-10">
+        <div className="flex items-center justify-between">
+          <Title title={"Account Information"} />
+          <div className="flex items-center gap-4 my-8">
+            <button
+              onClick={() => setIsOpen(true)}
+              className="px-2 py-1.5 bg-black dark:bg-violet-600 text-white dark:text-white 
+              flex items-center justify-center gap-2 border
+            bg-gray-500 hover:bg-violet-600 hover:shadow-lg shadow-lg"
+            >
+              <MdAdd size={26} />
+              <span>Add</span>
+            </button>
+          </div>
+        </div>
+
+        {data.length == 0 ? (
+          <div className="text-center text-gray-500 dark:text-gray-400">
+            No accounts found. Please add an account to manage your finances.
+          </div>
+        ) : (
+          <div className="w-full grid grid-cols-1 md:grid-cols-3 2xl:grid-cols-4 gap-6 py-10">
+            {data?.map((account, index) => (
+              <div
+                key={index}
+                className="w-full h-48 flex gap-4 bg-gray-50 dark:bg-slate-800 p-4 rounded-lg shadow"
+              >
+                <div>{getIcon(account?.account_name)}</div>
+
+                <div className="space-y-2 w-full">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <p className="text-black dark:text-gray-400 text-lg">
+                        {account?.account_name}
+                      </p>
+                      <MdVerifiedUser
+                        size={20}
+                        className="text-emerald-600 ml-1"
+                      />
+                    </div>
+                    <AccountMenu
+                      addMoney={() => handleOpenAddMoney(account)}
+                      transferMoney={() => handleTransfer(account)}
+                    />
+                  </div>
+
+                  <span className="dark:text-gray-400  text-gray-600">
+                    {maskAccountNumber(account.account_number)}
+                  </span>
+                  <p className="text-xs text-gray-600 dark:text-gray-500">
+                    {account?.createdat
+                      ? new Date(account.createdat).toLocaleDateString(
+                          "en-US",
+                          {
+                            dateStyle: "full",
+                          }
+                        )
+                      : "Unknown"}
+                  </p>
+                  <div className="flex align-center justify-between ">
+                    <p className="text-xl text-gray-600 dark:text-gray-500 font font-medium">
+                      {formatCurrency(account?.account_balance)}
+                    </p>
+                      <button className="text-xs text-gray-600 dark:text-gray-500 ">Add Money</button>
+                  </div>
+
+                
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </>
+  );
+};
+
+export default AccountPage;
