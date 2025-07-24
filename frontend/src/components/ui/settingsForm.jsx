@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-undef */
 import React, { Fragment, useEffect, useState } from "react";
 import useStore from "../../store";
 import { useForm } from "react-hook-form";
@@ -197,7 +195,7 @@ const SettingsForm = () => {
           <Input
             disabled={loading}
             id="email"
-            // name="Email"
+            name="email"
             label="Email Address"
             type="email"
             placeholder="test@example.com"
