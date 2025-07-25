@@ -29,9 +29,8 @@ export const getAccounts = async (req, res) => {
 export const createAccount = async (req, res) => {
     try {
         const { userId } = req.body.user;
-        console.log(userId)
         const { name, account_number, amount } = req.body;
-
+        
         const accountExistsQuery = {
             text: `SELECT * FROM tblaccount WHERE user_id = $1`,
             values: [userId]
@@ -40,7 +39,7 @@ export const createAccount = async (req, res) => {
         const accountExistResult = await pool.query(accountExistsQuery);
 
         if (accountExistResult.rows[0]) {
-            res.status(409).json({
+            return res.status(409).json({
                 status: "failed",
                 message: "account already created"
             })

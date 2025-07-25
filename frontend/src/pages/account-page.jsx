@@ -11,6 +11,7 @@ import Title from "../components/ui/title";
 import { MdAdd, MdVerifiedUser } from "react-icons/md";
 import { formatCurrency, maskAccountNumber } from "../libs";
 import AccountMenu from "../components/ui/accountDialog";
+import AddAccount from "../components/ui/AddAccount";
 
 const ICONS = {
   crypto: (
@@ -74,15 +75,6 @@ const AccountPage = () => {
     }
   };
 
-  const handleOpenAddMoney = (account) => {
-    setSelectedAccount(account?.id);
-    setIsOpenTopup(true);
-  };
-  const handleTransfer = (account) => {
-    setSelectedAccount(account?.id);
-    setIsOpenTransfer(true);
-  };
-
   useEffect(() => {
     setIsLoading(true);
     fetchAccounts();
@@ -99,9 +91,10 @@ const AccountPage = () => {
           <div className="flex items-center gap-4 my-8">
             <button
               onClick={() => setIsOpen(true)}
-              className="px-2 py-1.5 bg-black dark:bg-violet-600 text-white dark:text-white 
-              flex items-center justify-center gap-2 border
-            bg-gray-500 hover:bg-violet-600 hover:shadow-lg shadow-lg"
+              className="
+              px-2 py-1.5 bg-black dark:bg-violet-600 text-white 
+            dark:text-white flex items-center justify-center gap-2 border rounded-2xl
+            hover:bg-violet-600 hover:shadow-lg shadow-lg"
             >
               <MdAdd size={26} />
               <span>Add</span>
@@ -166,6 +159,14 @@ const AccountPage = () => {
           </div>
         )}
       </div>
+
+      <AddAccount
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        refetch={fetchAccounts}
+        key={new Date().getTime()}
+      />
+      {isOpen && <p className="text-red-500">Modal should be open</p>}
     </>
   );
 };
