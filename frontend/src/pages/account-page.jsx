@@ -89,6 +89,10 @@ const AccountPage = () => {
     setSelectedAccount(account.id);
     setIsOpenTransfer(true);
   };
+  const handleOpenAddMoney = (account) => {
+    setSelectedAccount(account.id);
+    setIsOpenTopup(true);
+  };
 
   return (
     <>
@@ -158,10 +162,7 @@ const AccountPage = () => {
                       {formatCurrency(account?.account_balance)}
                     </p>
                     <button
-                      onClick={() => {
-                        setSelectedAccount(account.id);
-                        setIsOpenTopup(true);
-                      }}
+                      onClick={() => handleOpenAddMoney(account)}
                       className="text-xs hover:underline text-gray-600 dark:text-gray-500 "
                     >
                       Add Money
