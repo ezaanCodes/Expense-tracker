@@ -12,6 +12,7 @@ import { MdAdd, MdVerifiedUser } from "react-icons/md";
 import { formatCurrency, maskAccountNumber } from "../libs";
 import AccountMenu from "../components/ui/accountDialog";
 import AddAccount from "../components/ui/AddAccount";
+import AddMoney from "../components/ui/AddMoney";
 
 const ICONS = {
   crypto: (
@@ -63,7 +64,6 @@ const AccountPage = () => {
     try {
       const { data: res } = await api.get("/account");
       setData(res.data);
-      console.log("Accounts fetched successfully:", res.data.createdAt);
     } catch (error) {
       toast.error(error?.response?.data?.message);
       if (error?.response?.data?.status === "auth_failed") {
@@ -149,10 +149,16 @@ const AccountPage = () => {
                     <p className="text-xl text-gray-600 dark:text-gray-500 font font-medium">
                       {formatCurrency(account?.account_balance)}
                     </p>
-                      <button className="text-xs text-gray-600 dark:text-gray-500 ">Add Money</button>
+                    <button
+                      onClick={() => {
+                        setSelectedAccount(account.id);
+                        setIsOpenTopup(true);
+                      }}
+                      className="text-xs hover:underline text-gray-600 dark:text-gray-500 "
+                    >
+                      Add Money
+                    </button>
                   </div>
-
-                
                 </div>
               </div>
             ))}
@@ -166,7 +172,21 @@ const AccountPage = () => {
         refetch={fetchAccounts}
         key={new Date().getTime()}
       />
-      {isOpen && <p className="text-red-500">Modal should be open</p>}
+
+      <AddMoney
+        isOpen={isOpenTopup}
+        setIsOpen={setIsOpenTopup}
+        refetch={fetchAccounts}
+        key={new Date().getTime()}
+        id={selectedAccount}
+      />
+
+      {/* <TransferMoney
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        refetch={fetchAccounts}
+        key={new Date().getTime()}
+      /> */}
     </>
   );
 };
