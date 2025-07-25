@@ -17,7 +17,7 @@ export default function AccountMenu({ addMoney, transferMoney }) {
                 {() => (
                   <button
                     onClick={transferMoney}
-                    className="group flex gap-2 w-full items-center rounded-md px-2 py-2 text-sm text-gray-700 dark:text-gray-200"
+                    className="group flex gap-2 w-full items-center rounded-md px-2 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-violet-700 transition-colors"
                   >
                     <BiTransfer />
                     Transfer Funds
@@ -28,7 +28,7 @@ export default function AccountMenu({ addMoney, transferMoney }) {
                 {() => (
                   <button
                     onClick={addMoney}
-                    className="group flex gap-2 w-full items-center rounded-md px-2 py-2 text-sm text-gray-700 dark:text-gray-200"
+                    className="group flex gap-2 w-full items-center rounded-md px-2 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-violet-700 transition-colors"
                   >
                     <BiTransfer />
                     Add Funds

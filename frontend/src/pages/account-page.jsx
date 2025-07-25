@@ -13,6 +13,7 @@ import { formatCurrency, maskAccountNumber } from "../libs";
 import AccountMenu from "../components/ui/accountDialog";
 import AddAccount from "../components/ui/AddAccount";
 import AddMoney from "../components/ui/AddMoney";
+import TransferMoney from "../components/ui/transferMoney";
 
 const ICONS = {
   crypto: (
@@ -83,6 +84,12 @@ const AccountPage = () => {
   if (isLoading) {
     return <Loading />;
   }
+
+  const handleTransfer = (account) => {
+    setSelectedAccount(account.id);
+    setIsOpenTransfer(true);
+  };
+
   return (
     <>
       <div className="w-full py-10">
@@ -127,6 +134,7 @@ const AccountPage = () => {
                       />
                     </div>
                     <AccountMenu
+                      className=""
                       addMoney={() => handleOpenAddMoney(account)}
                       transferMoney={() => handleTransfer(account)}
                     />
@@ -181,12 +189,12 @@ const AccountPage = () => {
         id={selectedAccount}
       />
 
-      {/* <TransferMoney
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
+      <TransferMoney
+        isOpen={isOpenTransfer}
+        setIsOpen={setIsOpenTransfer}
         refetch={fetchAccounts}
-        key={new Date().getTime()}
-      /> */}
+        id={selectedAccount}
+      />
     </>
   );
 };
