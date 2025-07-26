@@ -9,6 +9,11 @@ import { IoSearchOutline } from "react-icons/io5";
 import { MdAdd } from "react-icons/md";
 import { CiExport } from "react-icons/ci";
 import { exportToExcel } from "react-json-to-excel";
+import DateRange from "../components/ui/dateRange";
+import { formatCurrency } from "../libs";
+import { TiWarning } from "react-icons/ti";
+import { IoCheckmarkDoneCircle } from "react-icons/io5";
+import { RiProgress3Line } from "react-icons/ri";
 
 const Transactions = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -67,7 +72,7 @@ const Transactions = () => {
           <Title title="Transactions" />
 
           <div className="flex flex-col md:flex-row md:items-center gap-4">
-            {/* <DateRange /> */}
+            <DateRange />
 
             <form onSubmit={handleSearch} className="flex items-center gap-2">
               <div className="w-full flex items-center gap-2 border border-gray-300 dark:border-gray-600 rounded-md px-2 py-2">
@@ -101,6 +106,98 @@ const Transactions = () => {
               Export <CiExport size={24} />
             </button>
           </div>
+        </div>
+
+        <div className="overflow-x-auto mt-5">
+          {data?.length === 0 ? (
+            <div className="w-full flex items-center justify-center py-10 text-gray-600 dark:text-gray-700 text-lg">
+              <span> No transaction History</span>
+            </div>
+          ) : (
+            <>
+              <table className="w-full">
+                <thead className="w-full border-b border-gray-300 dark:border-gray-700">
+                  <tr className="w-full text-black dark:text-gray-400 text-left">
+                    <th className="py-2"> Date</th>
+                    <th className="py-2 px-2"> Description</th>
+                    <th className="py-2 px-2"> Status</th>
+                    <th className="py-2 px-2"> Source</th>
+                    <th className="py-2 px-2"> Amount</th>
+                  </tr>
+                </thead>
+               <tbody>
+  {data?.map((item, index) => {
+    return (
+      <tr
+        key={index}
+        className="w-full border-b border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-500 hover:bg-gray-50"
+      >
+        <td className="py-4">
+          <p className="w-24 md:w-auto">
+            {new Date(item.createdat).toLocaleDateString()}
+          </p>
+        </td>
+        <td className="py-4 px-2">
+          <div className="flex flex-col w-56 md:w-auto">
+            <p className="text-base 2xl:text-lg text-black dark:text-gray-400 line-clamp-2">
+              {item.description}
+            </p>
+          </div>
+        </td>
+        <td className="py-4 px-2">
+          <div className="flex items-center gap-2">
+            <p className="text-base 2xl:text-lg text-black dark:text-gray-400 line-clamp-2">
+              {item.description}
+            </p>
+          </div>
+        </td>
+
+        <td className="py-4 px-2">
+          <div className="flex items-center gap-2">
+            {item.status === "Pending" && (
+              <RiProgress3Line className="text-amber-500" size={24} />
+            )}
+            {item.status === "Completed" && (
+              <IoCheckmarkDoneCircle className="text-emerald-600" size={24} />
+            )}
+            {item.status === "Rejected" && (
+              <TiWarning className="text-red-500" size={24} />
+            )}
+            <span>{item?.status}</span>
+          </div>
+        </td>
+
+        <td className="py-4 px-4">{item?.source}</td>
+
+        <td className="py-4 text-black dark:text-gray-400 text-base font-medium">
+          <span
+            className={
+              item?.type === "income"
+                ? "text-emerald-600"
+                : "text-red-600"
+            }
+          >
+            {item?.type === "income" ? "+" : "-"}
+          </span>
+          {formatCurrency(item?.amount)}
+        </td>
+
+        <td className="py-4 px-2">
+          <button
+            onClick={() => handleViewTransaction(item)}
+            className="outline-none text-violet-600 hover:underline"
+          >
+            view
+          </button>
+        </td>
+      </tr>
+    );
+  })}
+</tbody>
+
+              </table>
+            </>
+          )}
         </div>
       </div>
     </>
