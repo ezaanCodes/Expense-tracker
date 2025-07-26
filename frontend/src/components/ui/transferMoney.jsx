@@ -10,6 +10,7 @@ import api from "../../libs/apiCall";
 import { toast } from "sonner";
 import Loading from "./loading";
 import { MdOutlineWarning } from "react-icons/md";
+import { BiLoader } from "react-icons/bi";
 
 const TransferMoney = ({ isOpen, setIsOpen, id, refetch }) => {
   const {
