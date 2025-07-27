@@ -18,7 +18,8 @@ export const getTransactions = async (req, res) => {
 
     const startDate = new Date(df || sevenDaysAgo);
     const endDate = new Date(dt || new Date());
-
+    endDate.setHours(23, 59, 59, 999);
+    
     const transaction = await pool.query({
       text: `SELECT * FROM tbltransaction 
                    WHERE user_id = $1 

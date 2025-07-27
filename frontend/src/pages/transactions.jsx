@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
@@ -15,6 +14,7 @@ import { TiWarning } from "react-icons/ti";
 import { IoCheckmarkDoneCircle } from "react-icons/io5";
 import { RiProgress3Line } from "react-icons/ri";
 import ViewTransaction from "../components/ui/viewTransactions";
+import AddTransaction from "../components/ui/addTransaction";
 
 const Transactions = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -91,7 +91,7 @@ const Transactions = () => {
               onClick={() => {
                 setIsOpen(true);
               }}
-              className="py-1.5 px-2 rounded text-white bg-black dark:bg-violet-800 
+              className="py-1.5 px-2 text-white bg-black dark:bg-violet-800 
               flex items-center justify-center gap-2 border: rounded-md p-2"
             >
               <MdAdd size={22} />
@@ -237,13 +237,13 @@ const Transactions = () => {
           </div>
         </Dialog>
       )} */}
-      {/* <AddTransaction
+      <AddTransaction
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         refetch={fetchTransactions}
         key={new Date().getTime()}
       />
-      */}
+     
       <ViewTransaction
         isOpen={isOpenView}
         setIsOpen={setIsOpenView}
