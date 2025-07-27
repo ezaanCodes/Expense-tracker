@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { formatCurrency, getDateSevenDaysAgo } from "../../libs/index";
+import { getDateSevenDaysAgo } from "../../libs/index";
 
 const DateRange = () => {
-  const sevenDaysAgo = getDateSevenDaysAgo();
+  const sevenDaysAgo = getDateSevenDaysAgo(); // should return 'YYYY-MM-DD'
 
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -18,7 +18,7 @@ const DateRange = () => {
     const dt = searchParams.get("dt");
     return dt && new Date(dt).getTime() <= new Date().getTime()
       ? dt
-      : sevenDaysAgo || new Date().toISOString().split("T")[0];
+      : new Date().toISOString().split("T")[0];
   });
 
   useEffect(() => {
@@ -29,7 +29,7 @@ const DateRange = () => {
     const df = e.target.value;
     setDateFrom(df);
     if (new Date(df).getTime() > new Date(dateTo).getTime()) {
-      setDateTo(df);
+      setDateTo(df); // auto-fix dateTo if it's before new dateFrom
     }
   };
 
@@ -37,22 +37,23 @@ const DateRange = () => {
     const dt = e.target.value;
     setDateTo(dt);
     if (new Date(dt).getTime() < new Date(dateFrom).getTime()) {
-      setDateFrom(dt);
+      setDateFrom(dt); // auto-fix dateFrom if it's after new dateTo
     }
   };
 
   return (
     <div className="flex items-center gap-2">
-      <div className="flex items-center gap-1">
+      {/* Date From Input */}
+      <div className="flex flex-col gap-1">
         <label
           htmlFor="dateFrom"
-          className="block text-gray-700 dark:text-gray-400 text-sm mb-2"
+          className="block text-gray-700 dark:text-gray-400 text-sm"
         >
-          Filter
+          From
         </label>
-
         <input
-          className="imputStyles"
+          id="dateFrom"
+          className="imputStyles dark:text-gray-500"
           name="dateFrom"
           type="date"
           max={dateTo}
@@ -61,25 +62,25 @@ const DateRange = () => {
         />
       </div>
 
-      <div className="flex items-center gap-1">
+      {/* Date To Input */}
+      <div className="flex flex-col gap-1">
         <label
-          htmlFor="dateFrom"
-          className="block text-gray-700 dark:text-gray-400 text-sm mb-2"
+          htmlFor="dateTo"
+          className="block text-gray-700 dark:text-gray-400 text-sm"
         >
           To
         </label>
-
         <input
-          className="imputStyles"
-          name="dateFrom"
+          id="dateTo"
+          className="imputStyles dark:text-gray-500"
+          name="dateTo"
           type="date"
+          min={dateFrom}
           max={new Date().toISOString().split("T")[0]}
-          value={dateFrom}
-          onChange={handleDateFromChange}
+          value={dateTo}
+          onChange={handleDateToChange}
         />
       </div>
-
-      
     </div>
   );
 };
