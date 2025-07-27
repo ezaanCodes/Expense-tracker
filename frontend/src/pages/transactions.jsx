@@ -92,7 +92,7 @@ const Transactions = () => {
                 setIsOpen(true);
               }}
               className="py-1.5 px-2 text-white bg-black dark:bg-violet-800 
-              flex items-center justify-center gap-2 border: rounded-md p-2"
+              flex items-center justify-center gap-2 border: rounded-md p-2 hover:bg-violet-800 dark:hover:bg-slate-100 dark:hover:text-black"
             >
               <MdAdd size={22} />
               <span> Pay </span>
@@ -206,49 +206,19 @@ const Transactions = () => {
           )}
         </div>
       </div>
-      {/* {isOpenView && (
-        <Dialog
-          open={isOpenView}
-          onClose={() => setIsOpenView(false)}
-          className="relative z-50"
-        >
-          <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
-          <div className="fixed inset-0 flex items-center justify-center p-4">
-            <Dialog.Panel className="bg-white dark:bg-gray-800 p-6 rounded-lg max-w-md w-full">
-              <Dialog.Title className="text-xl font-bold mb-4">
-                Transaction Details
-              </Dialog.Title>
-              <p>
-                <strong>Description:</strong> {selected?.description}
-              </p>
-              <p>
-                <strong>Status:</strong> {selected?.status}
-              </p>
-              <p>
-                <strong>Amount:</strong> {formatCurrency(selected?.amount)}
-              </p>
-              <button
-                className="mt-4 px-4 py-2 bg-violet-600 text-white rounded hover:bg-violet-700"
-                onClick={() => setIsOpenView(false)}
-              >
-                Close
-              </button>
-            </Dialog.Panel>
-          </div>
-        </Dialog>
-      )} */}
+
       <AddTransaction
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         refetch={fetchTransactions}
         key={new Date().getTime()}
       />
-     
+
       <ViewTransaction
         isOpen={isOpenView}
         setIsOpen={setIsOpenView}
         data={selected}
-      /> 
+      />
     </>
   );
 };

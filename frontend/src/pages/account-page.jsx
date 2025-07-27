@@ -102,10 +102,9 @@ const AccountPage = () => {
           <div className="flex items-center gap-4 my-8">
             <button
               onClick={() => setIsOpen(true)}
-              className="
-              px-2 py-1.5 bg-black dark:bg-violet-600 text-white 
-            dark:text-white flex items-center justify-center gap-2 border rounded-2xl
-            hover:bg-violet-600 hover:shadow-lg shadow-lg"
+              className="flex items-center justify-center gap-2 border rounded-2xl
+              px-2 py-1.5 bg-black text-white hover:bg-violet-600
+               dark:bg-violet-600  dark:text-white hover:shadow-lg shadow-lg dark:hover:bg-white-100 dark:hover:text-black"
             >
               <MdAdd size={26} />
               <span>Add</span>

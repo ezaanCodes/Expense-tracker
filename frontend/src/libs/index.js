@@ -30,14 +30,10 @@ export const formatCurrency = (value) => {
 };
 
 export const getDateSevenDaysAgo = () => {
-  const today = new Date();
-
-  const sevenDaysAgo = new Date(today);
-  sevenDaysAgo.setDate(today.getDate() - 7);
-
-  return sevenDaysAgo.toISOString().split("T")[0];
+  const date = new Date();
+  date.setDate(date.getDate() - 7);
+  return date.toISOString().split("T")[0];
 };
-
 export async function fetchCountries() {
   try {
     const response = await fetch("https://restcountries.com/v3.1/all?fields=name,flags,currencies");
