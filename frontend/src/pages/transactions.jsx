@@ -14,6 +14,7 @@ import { formatCurrency } from "../libs";
 import { TiWarning } from "react-icons/ti";
 import { IoCheckmarkDoneCircle } from "react-icons/io5";
 import { RiProgress3Line } from "react-icons/ri";
+import ViewTransaction from "../components/ui/viewTransactions";
 
 const Transactions = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -205,6 +206,49 @@ const Transactions = () => {
           )}
         </div>
       </div>
+      {/* {isOpenView && (
+        <Dialog
+          open={isOpenView}
+          onClose={() => setIsOpenView(false)}
+          className="relative z-50"
+        >
+          <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+          <div className="fixed inset-0 flex items-center justify-center p-4">
+            <Dialog.Panel className="bg-white dark:bg-gray-800 p-6 rounded-lg max-w-md w-full">
+              <Dialog.Title className="text-xl font-bold mb-4">
+                Transaction Details
+              </Dialog.Title>
+              <p>
+                <strong>Description:</strong> {selected?.description}
+              </p>
+              <p>
+                <strong>Status:</strong> {selected?.status}
+              </p>
+              <p>
+                <strong>Amount:</strong> {formatCurrency(selected?.amount)}
+              </p>
+              <button
+                className="mt-4 px-4 py-2 bg-violet-600 text-white rounded hover:bg-violet-700"
+                onClick={() => setIsOpenView(false)}
+              >
+                Close
+              </button>
+            </Dialog.Panel>
+          </div>
+        </Dialog>
+      )} */}
+      {/* <AddTransaction
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        refetch={fetchTransactions}
+        key={new Date().getTime()}
+      />
+      */}
+      <ViewTransaction
+        isOpen={isOpenView}
+        setIsOpen={setIsOpenView}
+        data={selected}
+      /> 
     </>
   );
 };
