@@ -19,7 +19,7 @@ const ThemeSwitch = () => {
     return (
         <button onClick={toggleTheme} className="outline-none">
             {isDarkMode ? (
-                <LuSun size={26} className="bg-amber-50" />
+                <LuSun size={26} color="gray"/>
             ) : (
                 <LuMoonStar size={26} />
             )}

@@ -63,21 +63,7 @@ const UserMenu = () => {
               )}
             </MenuItem>
           </div>
-          <div className='px-1 py-1 '>
-            <MenuItem>
-              {({ active }) => (
-                <button
-                  // onClick={handleSingout}
-                  className={`${active
-                    ? "bg-violet-500/10 text-gray-900 dark:text-white"
-                    : "text-gray-900 dark:text-gray-500"
-                    } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                >
-                  Profile
-                </button>
-              )}
-            </MenuItem>
-          </div>
+          
         </MenuItems>
       </TransitionWrapper>
     </Menu>
