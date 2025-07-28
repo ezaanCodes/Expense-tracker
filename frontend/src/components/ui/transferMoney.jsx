@@ -83,7 +83,7 @@ const TransferMoney = ({ isOpen, setIsOpen, id, refetch }) => {
 
   useEffect(() => {
     fetchAccounts();
-  }, []);
+  }, [isOpen]);
 
   return (
     <DialogWrapper isOpen={isOpen} closeModal={closeModal}>

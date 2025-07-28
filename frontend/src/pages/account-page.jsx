@@ -178,7 +178,7 @@ const AccountPage = () => {
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         refetch={fetchAccounts}
-        key={new Date().getTime()}
+        // key={new Date().getTime()}
       />
 
       <AddMoney
